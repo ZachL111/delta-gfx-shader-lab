@@ -1,68 +1,40 @@
 # delta-gfx-shader-lab
 
-`delta-gfx-shader-lab` explores graphics in Dart. The repository keeps the core rule set compact, then surrounds it with examples that show how the decisions move.
+`delta-gfx-shader-lab` keeps a focused Dart implementation around graphics. The project goal is to design a Dart verification harness for shader systems, covering format conversion, round-trip fixtures, and failure-oriented tests.
 
-## Delta Gfx Shader Lab Notes
+## Use Case
 
-The quickest review path is the verifier first, then the fixtures, then the operations note. That order makes it easy to see whether the code, data, and explanation still agree.
+This is intentionally local and self-contained so it can be inspected without credentials, services, or seeded history.
 
-## Feature Notes
+## Delta Gfx Shader Lab Review Notes
 
-- Includes extended examples for render inputs, including `surge` and `degraded`.
-- Documents stable output tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
-- Adds a repository audit script that checks structure before running the language verifier.
+For a quick review, compare `geometry span` with `shader drift` before reading the middle cases.
 
-## Why This Exists
+## Highlights
 
-This project keeps the domain idea close to the tests. That makes it useful as a reference implementation, a small experiment, or a starting point for a more specialized tool.
+- `fixtures/domain_review.csv` adds cases for geometry span and atlas pressure.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/delta-gfx-shader-walkthrough.md` walks through the case spread.
+- The Dart code includes a review path for `geometry span` and `shader drift`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Code Tour
+## Code Layout
 
-- `lib`: library code
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
+The repository has two validation layers: the original compact policy fixture and the domain review fixture. They are separate so one can change without hiding failures in the other.
 
-## Implementation Notes
+The Dart addition stays small enough to inspect in one sitting.
 
-The design is intentionally direct: parse or construct a signal, score it, classify it, and verify the expected branch. This makes the repository useful for studying graphics behavior without needing a service or database unless the language project itself is SQL. The Dart project uses a small library and assertion script, avoiding package dependencies for verification.
-
-## Try It
+## Run The Check
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Regression Path
 
-## Example Scenarios
+The same command runs the local verification path. The highest-scoring domain case is `stale` at 229, which lands in `ship`. The most cautious case is `edge` at 111, which lands in `watch`.
 
-The examples are meant to be readable before they are exhaustive. They cover enough variation to show how latency and risk can pull a decision below the threshold.
+## Future Work
 
-## Tests
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
-
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Boundaries
-
-The repository favors determinism over breadth. It does not pull live data, keep secrets, or depend on network access for verification.
-
-## Roadmap
-
-- Add a loader for `examples/extended_cases.csv` and promote selected cases into the language test suite.
-- Add a short report command that prints the score breakdown for a single scenario.
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Add one more graphics fixture that focuses on a malformed or borderline input.
-
-## Local Setup
-
-Install Dart and run the commands from the repository root. The project does not need credentials or a hosted service.
+This remains a local project with deterministic fixtures. It does not depend on credentials, hosted services, or live data. Future work should add richer malformed inputs before widening the public API.
